@@ -1,0 +1,37 @@
+@inherits LayoutComponentBase
+
+<div class="site-global-wrapper">
+    <header class="site-global-navbar">
+        <nav class="navbar">
+            <span class="navbar--title">Katalog</span>
+            <ul class="navbar--group">
+                <li><a href="/">Index</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="page page-widescreen">
+        @Body
+    </div>
+
+    <footer class="site-global-footer">
+        
+        <nav class="footer-sitemap" aria-labelledby="sitemapLabel">
+            
+            <label id="sitemapLabel">Katalog Page Overview</label>
+            
+            <ul>
+                <li><a href="/">Index</a></li>
+                <li><a href="/">Page 2</a></li>
+                <li><a href="/">Page 3</a></li>
+            </ul>
+            
+            
+        </nav>
+        
+        <section class="footer-copyright">
+            Copyright &copy; Stefan Heinz & Katalog Contributors 2023
+        </section>
+        
+    </footer>
+</div>

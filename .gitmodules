@@ -1,0 +1,3 @@
+[submodule "Katalog.Web/wwwroot/scss/ready"]
+	path = Katalog.Web/wwwroot/scss/ready
+	url = https://github.com/StefanH-AT/ReadyCss.git
