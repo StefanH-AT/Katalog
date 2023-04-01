@@ -1,5 +1,14 @@
+:root {
+    --ff-default: "Noto Sans", sans-serif;
+    --ff-mono: "Jetbrains Mono", monospace;
+}
+
 html {
     font-size: 14px;
+}
+
+main {
+    margin-block: var(--space-m);
 }
 
 .site-global-wrapper {
@@ -56,12 +65,6 @@ html {
 
 .footer-sitemap label {
     grid-column: 1 / -1;
-}
-
-.footer-sitemap ul {
-    
-    
-    
 }
 
 .site-global-footer .footer-copyright {

@@ -6,4 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Katalog.Core\Katalog.Core.csproj" />
+    <ProjectReference Include="..\Katalog.Persistence\Katalog.Persistence.csproj" />
+    <ProjectReference Include="..\Katalog.Storage\Katalog.Storage.csproj" />
+  </ItemGroup>
+
 </Project>
