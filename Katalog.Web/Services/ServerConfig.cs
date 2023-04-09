@@ -1,3 +1,4 @@
+
 namespace Katalog.Web.Services;
 
 /// <summary>
@@ -27,6 +28,10 @@ public class ServerConfig
     /// Example: <code>/var/katalog/media</code>
     /// </summary>
     public string FileSystemStoragePath { get; init; }
+    
+    public DatabaseProvider DatabaseProvider { get; init; }
+    
+    public string DatabaseSqliteConnectionString { get; init; }
 
     private readonly IConfiguration _config;
     
@@ -38,6 +43,9 @@ public class ServerConfig
         Host = LoadString("Host");
         StorageProvider = LoadMediaStorageProvider("Storage:ProviderName");
         FileSystemStoragePath = LoadString("Storage:FileSystem:Path");
+        
+        DatabaseProvider = LoadDatabaseProvider("Database:ProviderName");
+        DatabaseSqliteConnectionString = LoadString("Database:Sqlite:ConnectionString");
     }
 
     private string LoadString(string path)
@@ -60,6 +68,15 @@ public class ServerConfig
             return result;
         
         throw new MalformedServerConfigException<MediaStorageProvider>(path, val);
+    }
+    
+    private DatabaseProvider LoadDatabaseProvider(string path)
+    {
+        string val = _config[path] ?? throw new MissingServerConfigException(path);
+        if (Enum.TryParse<DatabaseProvider>(val, out var result))
+            return result;
+        
+        throw new MalformedServerConfigException<DatabaseProvider>(path, val);
     }
     
 }
@@ -88,4 +105,9 @@ public enum MediaStorageProvider
 {
     FileSystem,
     S3
+}
+
+public enum DatabaseProvider
+{
+    Sqlite
 }
