@@ -1,5 +1,4 @@
-using Katalog.Core;
-using Katalog.Storage;
+using Katalog.Web.Model;
 
 namespace Katalog.Web.Services;
 

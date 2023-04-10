@@ -1,7 +1,5 @@
 
-global using Katalog.Core;
-using Katalog.Persistence;
-using Katalog.Storage;
+using Katalog.Web.Areas.Identity.Data;
 using Katalog.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +7,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
 
+Console.WriteLine("Starting Katalog");
+
 var builder = WebApplication.CreateBuilder(args);
+
+if (OperatingSystem.IsWindows())
+{
+    builder.Configuration.AddJsonFile("appsettings.Windows.json", optional: true);
+    if (builder.Environment.IsDevelopment())
+        builder.Configuration.AddJsonFile("appsettings.Windows.Development.json", optional: true);
+}
+if (OperatingSystem.IsLinux())
+{
+    builder.Configuration.AddJsonFile("appsettings.Linux.json", optional: true);
+    if (builder.Environment.IsDevelopment())
+        builder.Configuration.AddJsonFile("appsettings.Linux.Development.json", optional: true);
+}
 
 builder.Services.AddLogging(loggingBuilder =>
 {
@@ -26,13 +39,22 @@ if (config is null)
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddDbContext<KatalogContext>(options =>
+builder.Services.AddDbContext<WebContext>(options =>
 {
     if (config.DatabaseProvider == DatabaseProvider.Sqlite)
     {
+        Console.WriteLine("Using SQLite database located at " + config.DatabaseSqliteConnectionString);
         options.UseSqlite(config.DatabaseSqliteConnectionString);
     }
 });
+
+builder.Services.AddDefaultIdentity<WebUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+    options.Password.RequiredLength = 18;
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
+    options.User.RequireUniqueEmail = true;
+}).AddRoles<IdentityRole>().AddEntityFrameworkStores<WebContext>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -43,13 +65,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LogoutPath = "/identity/logout";
         options.AccessDeniedPath = "/auth/accessdenied";
     });
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = true;
-    options.Password.RequiredLength = 18;
-    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
-    options.User.RequireUniqueEmail = true;
-}).AddRoles<IdentityRole>().AddEntityFrameworkStores<KatalogContext>();
 
 
 builder.Services.AddSingleton<IMediaStorage, LocalMediaStorageService>();
@@ -60,7 +75,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -71,14 +85,18 @@ if (config.StorageProvider == MediaStorageProvider.FileSystem)
 {
     app.UseStaticFiles(new StaticFileOptions()
     {
-        FileProvider = new PhysicalFileProvider(config.FileSystemStoragePath, ExclusionFilters.DotPrefixed),
+        FileProvider = new PhysicalFileProvider(Path.GetFullPath(config.FileSystemStoragePath), ExclusionFilters.DotPrefixed),
         RequestPath = "/media"
     });
 }
 
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
+app.MapRazorPages();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 

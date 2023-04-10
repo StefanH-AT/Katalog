@@ -1,4 +1,3 @@
-using Katalog.Storage;
 using Katalog.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
