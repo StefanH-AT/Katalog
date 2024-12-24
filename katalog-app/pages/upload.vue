@@ -1,12 +1,10 @@
 <script setup lang="ts">
-definePageMeta({
-  auth: false,
-})
+
 </script>
 
 <template>
   <div>
-    <h1 class="text-2xl">Katalog</h1>
+    <h1 class="text-2xl">Upload</h1>
   </div>
 </template>
 

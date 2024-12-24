@@ -1,18 +1,23 @@
 <script setup lang="ts">
-const route = useRoute();
-const router = useRouter();
 
-if(!route.params.username) {
-  const auth = useAuth();
-  if(auth.status.value === "authenticated") {
-    router.push("/profile/" + auth.data.value?.user?.name);
-  } else {
-    router.push("/");
-  }
-}
+import UserProfile from "~/components/UserProfile.vue";
+
+const route = useRoute();
+
+const store = useStorage("data");
+
+const username = route.params.username;
+
+const userKv = await store.getItem(`user:${username}`);
+
 </script>
 
 <template>
+
+  <UserProfile v-if="userKv != null" :user="userKv"/>
+  <div v-if="userKv == null">
+    Unknown profile {{ username }}
+  </div>
 
 </template>
 

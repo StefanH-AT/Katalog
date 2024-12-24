@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
+import type {User} from "next-auth";
+
+const props = defineProps<{user: User}>();
 
 </script>
 
 <template>
-  <UContainer>
-    <TheNavBar/>
-    <slot/>
-  </UContainer>
+
 </template>
 
 <style scoped>
