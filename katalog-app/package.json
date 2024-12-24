@@ -10,11 +10,13 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@auth/unstorage-adapter": "^2.7.4",
     "@iconify-json/lucide": "^1.2.20",
     "@nuxt/ui": "2.20.0",
     "@sidebase/nuxt-auth": "0.10.0",
     "next-auth": "~4.21.1",
     "nuxt": "^3.14.1592",
+    "unstorage": "^1.14.1",
     "vue": "latest",
     "vue-router": "latest"
   }

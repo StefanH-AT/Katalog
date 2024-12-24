@@ -2,10 +2,12 @@
 
 const {status, data, signIn, signOut} = useAuth();
 
+console.log("Auth data", data);
+
 const authLink = status.value === "authenticated" ?
     [
       {
-        label: data.value?.user?.name,
+        label: data.value?.user?.displayName,
         avatar: {
           src: data.value?.user?.image
         },

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-
+const auth = useAuth();
 </script>
 
 <template>
-home page
+  <div>
+  </div>
 </template>
 
 <style scoped>
