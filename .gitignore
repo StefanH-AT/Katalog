@@ -40,6 +40,8 @@
 # *.iml
 # *.ipr
 
+katalog-app/.env
+
 # CMake
 cmake-build-*/
 

@@ -1,5 +1,5 @@
 <template>
-  <UContainer>
-    <h1>Katalog</h1>
-  </UContainer>
+  <NuxtLayout>
+    <NuxtPage/>
+  </NuxtLayout>
 </template>
