@@ -4,6 +4,20 @@ import {useFileDialog} from "@vueuse/core";
 
 const addedFiles = ref<File[]>([]);
 
+const columns = [
+  {
+    key: "name",
+    label: "Name",
+  },
+  {
+    key: "size",
+    label: "File Size",
+  },
+  {
+    key: "action",
+  },
+]
+
 const {open, files, reset, onChange, onCancel} = useFileDialog({
   accept: "*",
   directory: false,
@@ -28,21 +42,37 @@ function remove(fileName: string) {
 <template>
   <UCard>
     <template #header>
-      Direct upload
+      <div class="flex justify-between">
+        <span>Direct upload</span>
+        <UButton leading-icon="lucide:upload" :disabled="addedFiles.length === 0">Upload {{ addedFiles.length }} files</UButton>
+      </div>
     </template>
-    <ul>
-      <li v-for="file in addedFiles" class="flex justify-between">
-        <div>
-          {{file.name}} {{(file.size / 1024).toFixed(2)}}kB
+
+    <UTable :rows="addedFiles" :columns="columns">
+
+      <template #size-data="{ row }">
+        {{ (row.size / 1024).toFixed(2) }} kB
+      </template>
+
+      <template #action-data="{ row }">
+        <UButton icon="lucide:minus" color="red" @click="() => remove(row.name)"/>
+      </template>
+
+      <template #empty-state>
+        <div class="grid place-items-center p-10">
+          <UButton leading-icon="lucide:plus" @click="open" variant="outline">Add files from computer</UButton>
         </div>
-        <div>
-          <UButton icon="lucide:minus" color="red" variant="link" @click="() => remove(file.name)"/>
-        </div>
-      </li>
-    </ul>
-    <template #footer>
-      <UButton leading-icon="lucide:upload" @click="open">Add files</UButton>
-    </template>
+      </template>
+
+    </UTable>
+
+    <div v-if="addedFiles.length > 0">
+      <UDivider class="mb-5"/>
+
+      <UButton leading-icon="lucide:plus" @click="open" variant="outline">Add files from computer</UButton>
+    </div>
+
+
   </UCard>
 </template>
 
