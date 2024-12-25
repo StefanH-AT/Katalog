@@ -1,3 +1,4 @@
+// TODO: This doesn't protect for authentication does it?
 export default defineEventHandler(async (event) => {
     const username = getRouterParam(event, "username");
     const store = useStorage("data");
