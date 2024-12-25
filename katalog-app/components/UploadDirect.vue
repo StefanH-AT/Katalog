@@ -60,6 +60,10 @@ function remove(fileName: string) {
   addedFiles.value.splice(index, 1);
 }
 
+async function upload() {
+  const response = await useFetch("/api/nugget", { method: "POST", body: { files: files.value } });
+}
+
 </script>
 
 <template>
@@ -67,7 +71,7 @@ function remove(fileName: string) {
     <template #header>
       <div class="flex justify-between items-center">
         <span class="text-xl">Direct upload</span>
-        <UButton leading-icon="lucide:upload" :disabled="addedFiles.length === 0">Upload {{ addedFiles.length }} files</UButton>
+        <UButton leading-icon="lucide:upload" @click="upload" :disabled="addedFiles.length === 0">Upload {{ addedFiles.length }} files</UButton>
       </div>
     </template>
 
