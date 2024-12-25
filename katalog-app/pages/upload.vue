@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import UploadDirect from "~/components/UploadDirect.vue";
+import UploadDirect from "~/components/TheUploadDirect.vue";
 import TheUploadYtdlp from "~/components/TheUploadYtdlp.vue";
 
 const tabItems = [
