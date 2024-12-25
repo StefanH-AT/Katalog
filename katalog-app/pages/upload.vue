@@ -19,8 +19,7 @@ const tabItems = [
 </script>
 
 <template>
-  <div>
-    <h1 class="text-2xl">Upload</h1>
+  <div class="pb">
     <UTabs :items="tabItems">
       <template #item="{ item }">
 

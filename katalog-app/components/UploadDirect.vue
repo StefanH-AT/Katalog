@@ -1,8 +1,30 @@
 <script setup lang="ts">
 
-import {useFileDialog} from "@vueuse/core";
+import {useDropZone, useFileDialog} from "@vueuse/core";
 
 const addedFiles = ref<File[]>([]);
+
+const dropZoneRef = ref<HTMLDivElement>();
+
+function onDrop(files: File[] | null) {
+  if(files) {
+    addFiles(files);
+  }
+}
+
+function addFiles(files: File[] | FileList) {
+  for (const file of files) {
+    if(!addedFiles.value.some(f => f.name === file.name)) {
+      addedFiles.value.push(file);
+    }
+  }
+}
+
+const { isOverDropZone } = useDropZone(dropZoneRef, {
+  onDrop,
+  multiple: true,
+  preventDefaultForUnhandled: false,
+})
 
 const columns = [
   {
@@ -12,6 +34,10 @@ const columns = [
   {
     key: "size",
     label: "File Size",
+  },
+  {
+    key: "type",
+    label: "Type",
   },
   {
     key: "action",
@@ -24,11 +50,8 @@ const {open, files, reset, onChange, onCancel} = useFileDialog({
 })
 
 onChange((files) => {
-  if(!files) return;
-  for (const file of files) {
-    if(!addedFiles.value.some(f => f.name === file.name)) {
-      addedFiles.value.push(file);
-    }
+  if(files) {
+    addFiles(files);
   }
 });
 
@@ -42,35 +65,42 @@ function remove(fileName: string) {
 <template>
   <UCard>
     <template #header>
-      <div class="flex justify-between">
-        <span>Direct upload</span>
+      <div class="flex justify-between items-center">
+        <span class="text-xl">Direct upload</span>
         <UButton leading-icon="lucide:upload" :disabled="addedFiles.length === 0">Upload {{ addedFiles.length }} files</UButton>
       </div>
     </template>
 
-    <UTable :rows="addedFiles" :columns="columns">
+    <div ref="dropZoneRef" class="rounded border border-gray-700 p-4" :class="{'border-primary border-dotted': isOverDropZone}">
 
-      <template #size-data="{ row }">
-        {{ (row.size / 1024).toFixed(2) }} kB
-      </template>
+      <UTable :rows="addedFiles" :columns="columns">
 
-      <template #action-data="{ row }">
-        <UButton icon="lucide:minus" color="red" @click="() => remove(row.name)"/>
-      </template>
+        <template #size-data="{ row }">
+          {{ (row.size / 1024).toFixed(2) }} kB
+        </template>
 
-      <template #empty-state>
-        <div class="grid place-items-center p-10">
-          <UButton leading-icon="lucide:plus" @click="open" variant="outline">Add files from computer</UButton>
-        </div>
-      </template>
+        <template #action-data="{ row }">
+          <UButton icon="lucide:minus" color="red" @click="() => remove(row.name)"/>
+        </template>
 
-    </UTable>
+        <template #empty-state>
+          <div class="grid place-items-center p-10 gap-5">
+            <span class="flex items-center gap-2"><UIcon name="lucide:file-plus-2" class="size-6"/> Drop files here</span>
+            <UDivider label="OR" size="sm" class="w-1/2" type="dashed"/>
+            <UButton leading-icon="lucide:plus" @click="open" variant="outline">Add files directly</UButton>
+          </div>
+        </template>
 
-    <div v-if="addedFiles.length > 0">
-      <UDivider class="mb-5"/>
+      </UTable>
 
-      <UButton leading-icon="lucide:plus" @click="open" variant="outline">Add files from computer</UButton>
+      <div v-if="addedFiles.length > 0">
+        <UDivider class="mb-5"/>
+
+        <UButton leading-icon="lucide:plus" @click="open" variant="ghost">Add files</UButton>
+      </div>
+
     </div>
+
 
 
   </UCard>
