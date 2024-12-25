@@ -1,26 +1,15 @@
 export default defineEventHandler(async (event) => {
-    const body = await readBody(event);
-    if(!body) {
+    const multiPartData = await readMultipartFormData(event);
+    if(!multiPartData) {
         throw createError({
             statusCode: 400,
-            statusMessage: "Body is empty",
+            statusMessage: "Multi part form data is empty",
         });
     }
 
-    if(!body.files) {
-        throw createError({
-           statusCode: 400,
-           statusMessage: "No files",
-        });
+    console.log("Got multi part form data");
+
+    for (const data of multiPartData) {
+        console.log(data.filename);
     }
-
-    if(!Array.isArray(body.files)) {
-        throw createError({
-           statusCode: 400,
-           statusMessage: "Files are not array",
-        });
-    }
-
-    const anyFilesArray = body.files as any[];
-
 });

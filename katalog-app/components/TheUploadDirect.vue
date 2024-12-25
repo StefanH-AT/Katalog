@@ -2,9 +2,11 @@
 
 import {useDropZone, useFileDialog} from "@vueuse/core";
 
-const addedFiles = ref<File[]>([]);
+const toast = useToast();
 
+const addedFiles = ref<File[]>([]);
 const dropZoneRef = ref<HTMLDivElement>();
+let uploadStatus = ref<string>("idle");
 
 function onDrop(files: File[] | null) {
   if(files) {
@@ -61,7 +63,17 @@ function remove(fileName: string) {
 }
 
 async function upload() {
-  const response = await useFetch("/api/nugget", { method: "POST", body: { files: files.value } });
+  const formData = new FormData();
+
+  for (const file of addedFiles.value) {
+    formData.append("file", file);
+  }
+  const response = await useFetch("/api/nugget", {
+    method: "POST",
+    body: formData,
+  });
+
+  uploadStatus = response.status;
 }
 
 </script>
@@ -71,7 +83,7 @@ async function upload() {
     <template #header>
       <div class="flex justify-between items-center">
         <span class="text-xl">Direct upload</span>
-        <UButton leading-icon="lucide:upload" @click="upload" :disabled="addedFiles.length === 0">Upload {{ addedFiles.length }} files</UButton>
+        <UButton leading-icon="lucide:upload" @click="upload" :disabled="addedFiles.length === 0" :loading="uploadStatus === 'pending'">Upload {{ addedFiles.length }} files</UButton>
       </div>
     </template>
 
