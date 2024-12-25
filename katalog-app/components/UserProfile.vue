@@ -7,7 +7,7 @@ const props = defineProps<{user: User}>();
 </script>
 
 <template>
-
+<pre>{{props.user}}</pre>
 </template>
 
 <style scoped>

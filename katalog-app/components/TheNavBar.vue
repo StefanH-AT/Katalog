@@ -53,7 +53,7 @@ function buildProfileLinks() {
       avatar: {
         src: data.value?.user?.image
       },
-      to: "/profile/" + data.value?.user?.name
+      to: "/profile/" + data.value?.user?.id,
     },
     {
       icon: "lucide:log-out",

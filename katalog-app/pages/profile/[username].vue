@@ -4,20 +4,18 @@ import UserProfile from "~/components/UserProfile.vue";
 
 const route = useRoute();
 
-const store = useStorage("data");
-
 const username = route.params.username;
-
-const userKv = await store.getItem(`user:${username}`);
+const {data} = await useFetch(`/api/user/${username}`)
 
 </script>
 
 <template>
 
-  <UserProfile v-if="userKv != null" :user="userKv"/>
-  <div v-if="userKv == null">
+  <div v-if="data == null">
     Unknown profile {{ username }}
   </div>
+
+  <UserProfile v-if="data != null" :user="data"/>
 
 </template>
 
