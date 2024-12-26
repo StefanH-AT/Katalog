@@ -30,6 +30,7 @@ export default defineEventHandler(async (event) => {
             continue;
         }
 
+        // TODO: If i upload a 1gb file the server crashes :/
         if(part.data.byteLength > nuggetMaxImageFileSize) {
             responses.push({
                 index: i,
