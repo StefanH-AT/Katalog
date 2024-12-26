@@ -1,3 +1,18 @@
+
+
+# Katalog files are placed here in development
+.nuggets
+
+
+
+# Nuxt default config below
+
+
+
+
+
+
+
 # Nuxt dev/build outputs
 .output
 .data

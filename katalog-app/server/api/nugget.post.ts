@@ -1,3 +1,10 @@
+import fs from "fs/promises";
+import path from "node:path";
+import {mkdir} from "node:fs/promises";
+import {nuggetMaxImageFileSize} from "~/shared/nugget/NuggetUploadLimits";
+import {NuggetUploadFailureReasons, NuggetUploadResponse, NuggetUploadResponseStatuses} from "~/shared/nugget/NuggetUploadResponse";
+import {createNuggetId, getNuggetDirectory} from "~/server/utils/nugget";
+
 export default defineEventHandler(async (event) => {
     const multiPartData = await readMultipartFormData(event);
     if(!multiPartData) {
@@ -7,9 +14,60 @@ export default defineEventHandler(async (event) => {
         });
     }
 
-    console.log("Got multi part form data");
+    const responses: NuggetUploadResponse[] = [];
 
-    for (const data of multiPartData) {
-        console.log(data.filename);
+    const promises: Promise<{ index: number, fileName: string, nuggetId: string }>[] = [];
+
+    for (let i = 0; i < multiPartData.length; i++){
+        const part = multiPartData[i];
+        if(!part.filename) {
+            responses.push({
+                index: i,
+                fileName: "",
+                status: 1,
+                failureReason: NuggetUploadFailureReasons.NoFileName,
+            });
+            continue;
+        }
+
+        if(part.data.byteLength > nuggetMaxImageFileSize) {
+            responses.push({
+                index: i,
+                fileName: part.filename,
+                status: 1,
+                failureReason: NuggetUploadFailureReasons.ImageFileSizeExceeded,
+            });
+            continue;
+        }
+
+        promises.push(writeNugget(part.filename, i, part.data));
     }
+
+    const resolves = await Promise.all(promises);
+
+    for (const resolve of resolves) {
+        responses.push({
+            index: resolve.index,
+            fileName: resolve.fileName,
+            status: NuggetUploadResponseStatuses.Success,
+            nuggetId: resolve.nuggetId,
+        })
+    }
+
+    responses.sort(r => r.index);
+
+    return responses;
 });
+
+async function writeNugget(fileName: string, index: number, data: Buffer): Promise<{ index: number, fileName: string, nuggetId: string }> {
+    const nuggetDir = getNuggetDirectory();
+
+    const nuggetId = createNuggetId();
+    const fileDir = path.join(nuggetDir, nuggetId);
+    await mkdir(fileDir, {recursive: true});
+    const filePath = path.join(fileDir, fileName);
+    console.log(`Writing nugget to ${filePath}`);
+    await fs.writeFile(filePath, data);
+
+    return { index, fileName, nuggetId };
+}
