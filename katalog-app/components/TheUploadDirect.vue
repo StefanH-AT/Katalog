@@ -9,11 +9,25 @@ const addedFiles = ref<File[]>([]);
 const dropZoneRef = ref<HTMLDivElement>();
 let uploadStatus = ref<string>("idle");
 
-function onDrop(files: File[] | null) {
-  if(files) {
-    addFiles(files);
+const addedFileImages = ref<Map<string, string>>(new Map());
+
+watch(addedFiles, (newAddedFiles, oldAddedFiles) => {
+  for (let i = 0; i < newAddedFiles.length; i++) {
+    const file = newAddedFiles[i];
+    const fileName = file.name;
+    const reader  = new FileReader();
+    reader.onload = function(e)  {
+      const result = e.target?.result;
+      console.log(result);
+      if(typeof(result) === "string") {
+        const newMap = new Map<string, string>(addedFileImages.value);
+        newMap.set(fileName, result);
+        addedFileImages.value = newMap;
+      }
+    }
+    reader.readAsDataURL(file);
   }
-}
+}, {deep: true});
 
 function addFiles(files: File[] | FileList) {
   for (const file of files) {
@@ -23,43 +37,9 @@ function addFiles(files: File[] | FileList) {
   }
 }
 
-const { isOverDropZone } = useDropZone(dropZoneRef, {
-  onDrop,
-  multiple: true,
-  preventDefaultForUnhandled: false,
-})
-
-const columns = [
-  {
-    key: "name",
-    label: "Name",
-  },
-  {
-    key: "size",
-    label: "File Size",
-  },
-  {
-    key: "type",
-    label: "Type",
-  },
-  {
-    key: "action",
-  },
-]
-
-const {open, files, reset, onChange, onCancel} = useFileDialog({
-  accept: "*",
-  directory: false,
-})
-
-onChange((files) => {
-  if(files) {
-    addFiles(files);
-  }
-});
-
-function remove(fileName: string) {
+function removeFile(fileName: string) {
   const index = addedFiles.value.findIndex(f => f.name === fileName);
+  if(index === -1) return;
   addedFiles.value.splice(index, 1);
 }
 
@@ -77,6 +57,51 @@ async function upload() {
   uploadStatus = response.status;
 }
 
+function onDrop(files: File[] | null) {
+  if(files) {
+    addFiles(files);
+  }
+}
+
+const { isOverDropZone } = useDropZone(dropZoneRef, {
+  onDrop,
+  multiple: true,
+  preventDefaultForUnhandled: false,
+})
+
+const {open, files, reset, onChange, onCancel} = useFileDialog({
+  accept: "*",
+  directory: false,
+})
+
+onChange((files) => {
+  if(files) {
+    addFiles(files);
+  }
+});
+
+const columns = [
+  {
+    key: "preview",
+    label: "Preview",
+  },
+  {
+    key: "name",
+    label: "Name",
+  },
+  {
+    key: "size",
+    label: "File Size",
+  },
+  {
+    key: "type",
+    label: "Type",
+  },
+  {
+    key: "action",
+  },
+];
+
 </script>
 
 <template>
@@ -92,12 +117,16 @@ async function upload() {
 
       <UTable :rows="addedFiles" :columns="columns">
 
+        <template #preview-data="{ row }">
+          <img class="max-w-40 max-h-20" v-if="addedFileImages.has(row.name)" :src="addedFileImages.get(row.name)" alt="Preview"/>
+        </template>
+
         <template #size-data="{ row }">
           {{ filesize(row.size) }}
         </template>
 
         <template #action-data="{ row }">
-          <UButton icon="lucide:minus" color="red" @click="() => remove(row.name)"/>
+          <UButton icon="lucide:minus" color="red" @click="() => removeFile(row.name)"/>
         </template>
 
         <template #empty-state>
