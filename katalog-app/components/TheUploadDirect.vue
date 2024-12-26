@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import {useDropZone, useFileDialog} from "@vueuse/core";
+import {filesize} from "filesize";
 
 const toast = useToast();
 
@@ -92,7 +93,7 @@ async function upload() {
       <UTable :rows="addedFiles" :columns="columns">
 
         <template #size-data="{ row }">
-          {{ (row.size / 1024).toFixed(2) }} kB
+          {{ filesize(row.size) }}
         </template>
 
         <template #action-data="{ row }">
