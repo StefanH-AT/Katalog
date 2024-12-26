@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxt/ui', '@sidebase/nuxt-auth'],
+  modules: ['@nuxt/ui', '@sidebase/nuxt-auth', '@nuxt/fonts'],
   runtimeConfig: {
     auth: {
       secret: "",
@@ -27,5 +27,10 @@ export default defineNuxtConfig({
       enableOnWindowFocus: true,
     },
     globalAppMiddleware: true,
+  },
+  fonts: {
+    families: [
+      { name: "Inter", provider: "google" }
+    ]
   }
 })
