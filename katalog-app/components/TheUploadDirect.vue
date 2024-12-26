@@ -83,7 +83,7 @@ async function upload() {
     <template #header>
       <div class="flex justify-between items-center">
         <span class="text-xl">Direct upload</span>
-        <UButton leading-icon="lucide:upload" @click="upload" :disabled="addedFiles.length === 0" :loading="uploadStatus === 'pending'">Upload {{ addedFiles.length }} files</UButton>
+        <UButton leading-icon="lucide:upload" @click="upload" :disabled="addedFiles.length === 0" :loading="uploadStatus === 'pending'">Upload {{ addedFiles.length }} file{{addedFiles.length === 1 ? '' : 's'}}</UButton>
       </div>
     </template>
 
