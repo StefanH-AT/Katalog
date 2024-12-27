@@ -4,8 +4,11 @@ import {mkdir} from "node:fs/promises";
 import {nuggetMaxImageFileSize} from "~/shared/nugget/NuggetUploadLimits";
 import {NuggetUploadFailureReasons, NuggetUploadResponse, NuggetUploadResponseStatuses} from "~/shared/nugget/NuggetUploadResponse";
 import {createNuggetId, getNuggetDirectory} from "~/server/utils/nugget";
+import {protectEndpoint} from "~/server/utils/EndpointProtection";
 
 export default defineEventHandler(async (event) => {
+    await protectEndpoint(event);
+
     const multiPartData = await readMultipartFormData(event);
     if(!multiPartData) {
         throw createError({

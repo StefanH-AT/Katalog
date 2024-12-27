@@ -4,6 +4,16 @@ const {status, data, signIn, signOut} = useAuth();
 const isLoggedIn = status.value === "authenticated";
 
 function buildLinks() {
+
+  const authDisabled = useRuntimeConfig().public.authDisabled;
+
+  if(authDisabled) {
+    return [
+        buildHomeLink(),
+        buildUploadLink(),
+    ];
+  }
+
   if(isLoggedIn) {
     return [
         [

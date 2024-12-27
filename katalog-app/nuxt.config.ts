@@ -1,9 +1,23 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+
+let authEnabled = true;
+
+const envAuthDisable = process.env.NUXT_AUTH_DISABLE;
+if(envAuthDisable && envAuthDisable !== "false") {
+  authEnabled = false;
+
+  console.log("Auth disabled");
+}
+
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   modules: ['@nuxt/ui', '@sidebase/nuxt-auth', '@nuxt/fonts'],
   runtimeConfig: {
+    public: {
+      authDisabled: !authEnabled,
+    },
     auth: {
       secret: "",
       discordClientId: "",
@@ -11,7 +25,7 @@ export default defineNuxtConfig({
     }
   },
   auth: {
-    isEnabled: process.env.NUXT_AUTH_DISABLE !== undefined && process.env.NUXT_AUTH_DISABLE !== "false",
+    isEnabled: true,
     disableServerSideAuth: false,
     originEnvKey: 'AUTH_ORIGIN',
     baseURL: 'http://localhost:3000/api/auth',
@@ -26,7 +40,7 @@ export default defineNuxtConfig({
       enablePeriodically: true,
       enableOnWindowFocus: true,
     },
-    globalAppMiddleware: true,
+    globalAppMiddleware: authEnabled,
   },
   fonts: {
     families: [

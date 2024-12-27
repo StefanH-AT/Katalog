@@ -1,8 +1,8 @@
 import DiscordProvider, {DiscordProfile} from "next-auth/providers/discord"
-import {NuxtAuthHandler} from '#auth'
 import {randomUUID} from "uncrypto";
 import {OAuthUserConfig} from "next-auth/providers/oauth";
 import {UnstorageAdapter} from "@auth/unstorage-adapter";
+import {NuxtAuthHandler} from "#auth";
 
 interface FullDiscordProfile extends DiscordProfile {
     global_name: string;
