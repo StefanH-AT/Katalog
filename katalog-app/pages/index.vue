@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import TheFeed from "~/components/TheFeed.vue";
+
 definePageMeta({
   auth: false,
 })
@@ -6,7 +8,7 @@ definePageMeta({
 
 <template>
   <div>
-    <h1 class="text-2xl">Katalog</h1>
+    <TheFeed/>
   </div>
 </template>
 

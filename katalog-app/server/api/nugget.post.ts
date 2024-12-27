@@ -5,9 +5,10 @@ import {nuggetMaxImageFileSize} from "~/shared/nugget/NuggetUploadLimits";
 import {NuggetUploadFailureReasons, NuggetUploadResponse, NuggetUploadResponseStatuses} from "~/shared/nugget/NuggetUploadResponse";
 import {createNuggetId, getNuggetDirectory} from "~/server/utils/nugget";
 import {protectEndpoint} from "~/server/utils/EndpointProtection";
+import {NuggetMetaData} from "#shared/nugget/NuggetMetaData";
 
 export default defineEventHandler(async (event) => {
-    await protectEndpoint(event);
+    const session = await protectEndpoint(event);
 
     const multiPartData = await readMultipartFormData(event);
     if(!multiPartData) {
@@ -49,13 +50,24 @@ export default defineEventHandler(async (event) => {
 
     const resolves = await Promise.all(promises);
 
+    const nowTimestamp = Date.now();
+
     for (const resolve of resolves) {
         responses.push({
             index: resolve.index,
             fileName: resolve.fileName,
             status: NuggetUploadResponseStatuses.Success,
             nuggetId: resolve.nuggetId,
-        })
+        });
+
+        const storage = useStorage("data");
+        await storage.setItem<NuggetMetaData>(`nuggets:${resolve.nuggetId}`, {
+            nuggetId: resolve.nuggetId,
+            nuggetFileName: resolve.fileName,
+            uploadUserId: session.user?.id ?? "", // TODO: Verify user before uploading
+            uploadTimestamp: nowTimestamp,
+            image: `/nuggets/${resolve.nuggetId}/${resolve.fileName}`,
+        });
     }
 
     responses.sort(r => r.index);
