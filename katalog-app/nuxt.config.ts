@@ -32,5 +32,15 @@ export default defineNuxtConfig({
     families: [
       { name: "Inter", provider: "google" }
     ]
+  },
+  app: {
+    head: {
+      link: [
+        { rel: 'icon', type: 'image/png', sizes: '128x128', href: '/katalog-icon-128.png' },
+        { rel: 'icon', type: 'image/png', sizes: '64x64', href: '/katalog-icon-64.png' },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/katalog-icon-32.png' },
+        { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/katalog-icon-16.png' },
+      ]
+    }
   }
 })
