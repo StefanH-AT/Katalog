@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     }
   },
   auth: {
-    isEnabled: true,
+    isEnabled: process.env.NUXT_AUTH_DISABLE !== undefined && process.env.NUXT_AUTH_DISABLE !== "false",
     disableServerSideAuth: false,
     originEnvKey: 'AUTH_ORIGIN',
     baseURL: 'http://localhost:3000/api/auth',
@@ -39,7 +39,6 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '128x128', href: '/katalog-icon-128.png' },
         { rel: 'icon', type: 'image/png', sizes: '64x64', href: '/katalog-icon-64.png' },
         { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/katalog-icon-32.png' },
-        { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/katalog-icon-16.png' },
       ]
     }
   }
