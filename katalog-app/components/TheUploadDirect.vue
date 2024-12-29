@@ -3,8 +3,6 @@
 import {useDropZone, useFileDialog} from "@vueuse/core";
 import {filesize} from "filesize";
 
-const toast = useToast();
-
 const addedFiles = ref<File[]>([]);
 const dropZoneRef = ref<HTMLDivElement>();
 let uploadStatus = ref<string>("idle");

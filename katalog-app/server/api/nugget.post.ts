@@ -53,21 +53,23 @@ export default defineEventHandler(async (event) => {
     const nowTimestamp = Date.now();
 
     for (const resolve of resolves) {
-        responses.push({
-            index: resolve.index,
-            fileName: resolve.fileName,
-            status: NuggetUploadResponseStatuses.Success,
-            nuggetId: resolve.nuggetId,
-        });
-
-        const storage = useStorage("data");
-        await storage.setItem<NuggetMetaData>(`nuggets:${resolve.nuggetId}`, {
+        const metaData: NuggetMetaData = {
             nuggetId: resolve.nuggetId,
             nuggetFileName: resolve.fileName,
             uploadUserId: session.user?.id ?? "", // TODO: Verify user before uploading
             uploadTimestamp: nowTimestamp,
             image: `/nuggets/${resolve.nuggetId}/${resolve.fileName}`,
+        };
+
+        responses.push({
+            index: resolve.index,
+            fileName: resolve.fileName,
+            status: NuggetUploadResponseStatuses.Success,
+            metaData,
         });
+
+        const storage = useStorage("data");
+        await storage.setItem<NuggetMetaData>(`nuggets:${resolve.nuggetId}`, metaData);
     }
 
     responses.sort(r => r.index);

@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <UContainer class="grid gap-4">
+  <UContainer class="grid gap-4 min-h-screen grid-rows-layout">
     <TheNavBar/>
     <slot/>
   </UContainer>
