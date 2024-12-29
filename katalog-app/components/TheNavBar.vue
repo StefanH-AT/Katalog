@@ -3,7 +3,7 @@ const {status, data, signIn, signOut} = useAuth();
 
 const isLoggedIn = status.value === "authenticated";
 
-function buildLinks() {
+function buildItems() {
 
   const authDisabled = useRuntimeConfig().public.authDisabled;
 
@@ -30,7 +30,7 @@ function buildLinks() {
   }
 }
 
-const links = buildLinks();
+const items = buildItems();
 
 function buildLoginLinks() {
   return [{
@@ -76,7 +76,7 @@ function buildProfileLinks() {
 
 <template>
 
-  <UHorizontalNavigation :links="links"/>
+  <UNavigationMenu :items="items"/>
 </template>
 
 <style scoped>

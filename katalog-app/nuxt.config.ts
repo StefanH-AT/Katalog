@@ -47,6 +47,10 @@ export default defineNuxtConfig({
       { name: "Inter", provider: "google" }
     ]
   },
+  css: ["~/assets/css/main.css"],
+  ui: {
+
+  },
   app: {
     head: {
       link: [
