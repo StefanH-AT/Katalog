@@ -5,12 +5,12 @@ import TheUploadYtdlp from "~/components/TheUploadYtdlp.vue";
 
 const tabItems = [
   {
-    key: "direct",
+    slot: "direct",
     label: "Direct Upload",
     icon: "lucide:file-up",
   },
   {
-    "key": "ytdlp",
+    slot: "ytdlp",
     label: "yt-dlp",
     icon: "lucide:cloud-upload"
   }
@@ -20,13 +20,16 @@ const tabItems = [
 
 <template>
   <div class="pb">
-    <UTabs :items="tabItems">
-      <template #item="{ item }">
+    <UTabs :items="tabItems" variant="link">
 
-        <UploadDirect v-if="item.key === 'direct'"/>
-        <TheUploadYtdlp v-if="item.key === 'ytdlp'"/>
-
+      <template #direct>
+        <UploadDirect/>
       </template>
+
+      <template #ytdlp>
+        <TheUploadYtdlp/>
+      </template>
+
     </UTabs>
   </div>
 </template>

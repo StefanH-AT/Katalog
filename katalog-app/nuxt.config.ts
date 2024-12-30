@@ -17,6 +17,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       authDisabled: !authEnabled,
+      baseUrl: "http://localhost:3000",
     },
     auth: {
       secret: "",

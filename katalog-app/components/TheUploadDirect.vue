@@ -80,23 +80,24 @@ onChange((files) => {
 
 const columns = [
   {
-    key: "preview",
-    label: "Preview",
+    cell: "preview",
+    header: "Preview",
   },
   {
-    key: "name",
-    label: "Name",
+    cell: "name",
+    header: "Name",
   },
   {
-    key: "size",
-    label: "File Size",
+    cell: "size",
+    header: "File Size",
   },
   {
-    key: "type",
-    label: "Type",
+    cell: "type",
+    header: "Type",
   },
   {
-    key: "action",
+    cell: "action",
+    header: "",
   },
 ];
 
@@ -113,27 +114,27 @@ const columns = [
 
     <div ref="dropZoneRef" class="rounded border border-gray-700 p-4" :class="{'border-primary border-dotted': isOverDropZone}">
 
-      <UTable :rows="addedFiles" :columns="columns">
+      <UTable :rows="addedFiles">
 
-        <template #preview-data="{ row }">
-          <img class="max-w-40 max-h-20" v-if="addedFileImages.has(row.name)" :src="addedFileImages.get(row.name)" alt="Preview"/>
-        </template>
+<!--        <template #preview-data="{ row }">-->
+<!--          <img class="max-w-40 max-h-20" v-if="addedFileImages.has(row.name)" :src="addedFileImages.get(row.name)" alt="Preview"/>-->
+<!--        </template>-->
 
-        <template #size-data="{ row }">
-          {{ filesize(row.size) }}
-        </template>
+<!--        <template #size-data="{ row }">-->
+<!--          {{ filesize(row.size) }}-->
+<!--        </template>-->
 
-        <template #action-data="{ row }">
-          <UButton icon="lucide:minus" color="red" @click="() => removeFile(row.name)"/>
-        </template>
+<!--        <template #action-data="{ row }">-->
+<!--          <UButton icon="lucide:minus" color="red" @click="() => removeFile(row.name)"/>-->
+<!--        </template>-->
 
-        <template #empty-state>
-          <div class="grid place-items-center p-10 gap-5">
-            <span class="flex items-center gap-2"><UIcon name="lucide:file-plus-2" class="size-6"/> Drop files here</span>
-            <UDivider label="OR" size="sm" class="w-1/2" type="dashed"/>
-            <UButton leading-icon="lucide:plus" @click="open" variant="outline">Add files directly</UButton>
-          </div>
-        </template>
+<!--        <template #empty-state>-->
+<!--          <div class="grid place-items-center p-10 gap-5">-->
+<!--            <span class="flex items-center gap-2"><UIcon name="lucide:file-plus-2" class="size-6"/> Drop files here</span>-->
+<!--            <UDivider label="OR" size="sm" class="w-1/2" type="dashed"/>-->
+<!--            <UButton leading-icon="lucide:plus" @click="open" variant="outline">Add files directly</UButton>-->
+<!--          </div>-->
+<!--        </template>-->
 
       </UTable>
 

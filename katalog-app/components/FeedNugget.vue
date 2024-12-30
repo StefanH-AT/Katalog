@@ -1,13 +1,11 @@
 <template>
 
-  <NuxtLink class="border border-gray-700 hover:border-primary cursor-pointer p-1" :to="nuggetLink"  @contextmenu.prevent="onContextMenu">
-    <img class="max-h-40" :src="nugget.image"/>
-  </NuxtLink>
+  <UContextMenu :items="contextMenuItems">
 
-  <UContextMenu v-model="isOpen" :virtual-element="virtualElement">
-    <div class="p-4">
-      Menu
-    </div>
+    <NuxtLink class="border rounded-lg border-gray-700 hover:border-gray-400 cursor-pointer p-1" :to="nuggetLink">
+      <img class="max-h-40 rounded" :src="nugget.image"/>
+    </NuxtLink>
+
   </UContextMenu>
 
 </template>
@@ -15,30 +13,58 @@
 <script setup lang="ts">
 
 import type {NuggetMetaData} from "#shared/nugget/NuggetMetaData";
-import {useMouse, useWindowScroll} from "@vueuse/core";
+import {useClipboard} from "@vueuse/core";
+import type {NuggetDeleteResponse} from "#shared/nugget/NuggetDeleteResponse";
+import {useToast} from "#imports";
 
-const props = defineProps<{ nugget: NuggetMetaData }>();
+const clipboard = useClipboard();
+const config = useRuntimeConfig();
+const toast = useToast();
+
+const props = defineProps<{ nugget: NuggetMetaData, onNuggetDeleted: (nuggetId: string) => void }>();
 
 const nuggetLink = `/nugget/${props.nugget.nuggetId}`;
 
-const { x, y } = useMouse();
-const { y: windowY } = useWindowScroll();
-const isOpen = ref(false);
-const virtualElement = ref({ getBoundingClientRect: () => ({}) });
-
-function onContextMenu() {
-  const top = unref(y) - unref(windowY)
-  const left = unref(x)
-
-  virtualElement.value.getBoundingClientRect = () => ({
-    width: 0,
-    height: 0,
-    top,
-    left
-  })
-
-  isOpen.value = true
+function copyLink() {
+  clipboard.copy(`${config.public.baseUrl}${nuggetLink}`);
 }
+
+async function deleteMe() {
+  const deleteResult = await $fetch<NuggetDeleteResponse>(`/api/nugget/${props.nugget.nuggetId}`, { method: "delete" });
+
+  if(deleteResult.success) {
+    props.onNuggetDeleted(props.nugget.nuggetId);
+    toast.add({
+      title: "Nugget Deleted!",
+      color: "success",
+    });
+  }
+}
+
+const contextMenuItems = ref([
+  [
+    {
+      label: `Nugget`,
+      type: "label" as const,
+    },
+  ],
+  [
+    {
+      label: "Copy Link",
+      icon: "lucide:link",
+      onSelect: copyLink,
+    },
+  ],
+  [
+    {
+      label: "Delete",
+      icon: "lucide:trash-2",
+      color: "error" as const,
+      onSelect: deleteMe,
+    }
+  ]
+]);
+
 </script>
 
 <style scoped>

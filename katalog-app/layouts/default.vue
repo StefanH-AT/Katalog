@@ -4,10 +4,14 @@
 </script>
 
 <template>
-  <UContainer class="grid gap-4 min-h-screen grid-rows-layout">
-    <TheNavBar/>
-    <slot/>
-  </UContainer>
+
+  <UApp>
+    <UContainer class="min-h-screen">
+      <TheNavBar/>
+      <slot/>
+    </UContainer>
+  </UApp>
+
 </template>
 
 <style scoped>
