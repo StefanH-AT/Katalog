@@ -14,14 +14,14 @@
 
 import type {NuggetMetaData} from "#shared/nugget/NuggetMetaData";
 import {useClipboard} from "@vueuse/core";
-import type {NuggetDeleteResponse} from "#shared/nugget/NuggetDeleteResponse";
 import {useToast} from "#imports";
 
 const clipboard = useClipboard();
 const config = useRuntimeConfig();
 const toast = useToast();
+const nuggetStore = useNuggetStore();
 
-const props = defineProps<{ nugget: NuggetMetaData, onNuggetDeleted: (nuggetId: string) => void }>();
+const props = defineProps<{ nugget: NuggetMetaData }>();
 
 const nuggetLink = `/nugget/${props.nugget.nuggetId}`;
 
@@ -30,13 +30,16 @@ function copyLink() {
 }
 
 async function deleteMe() {
-  const deleteResult = await $fetch<NuggetDeleteResponse>(`/api/nugget/${props.nugget.nuggetId}`, { method: "delete" });
-
-  if(deleteResult.success) {
-    props.onNuggetDeleted(props.nugget.nuggetId);
+  const success = await nuggetStore.deleteNuggetFromServer(props.nugget.nuggetId);
+  if(success) {
     toast.add({
       title: "Nugget Deleted!",
       color: "success",
+    });
+  } else {
+    toast.add({
+      title: "There was an error when trying to delete this nugget",
+      color: "error",
     });
   }
 }
@@ -66,7 +69,3 @@ const contextMenuItems = ref([
 ]);
 
 </script>
-
-<style scoped>
-
-</style>

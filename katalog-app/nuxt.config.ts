@@ -13,7 +13,7 @@ if(envAuthDisable && envAuthDisable !== "false") {
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxt/ui', '@sidebase/nuxt-auth', '@nuxt/fonts'],
+  modules: ['@nuxt/ui', '@sidebase/nuxt-auth', '@nuxt/fonts', '@pinia/nuxt'],
   runtimeConfig: {
     public: {
       authDisabled: !authEnabled,
@@ -42,6 +42,9 @@ export default defineNuxtConfig({
       enableOnWindowFocus: true,
     },
     globalAppMiddleware: authEnabled,
+  },
+  pinia: {
+    storesDirs: ["./stores/**"],
   },
   fonts: {
     families: [
