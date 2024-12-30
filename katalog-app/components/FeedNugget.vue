@@ -2,8 +2,8 @@
 
   <UContextMenu :items="contextMenuItems">
 
-    <NuxtLink class="border rounded-lg border-gray-700 hover:border-gray-400 cursor-pointer p-1" :to="nuggetLink">
-      <img class="max-h-40 rounded" :src="nugget.image"/>
+    <NuxtLink class="border rounded-lg border-gray-700 hover:border-gray-400 cursor-pointer p-1 aspect-square" :to="nuggetLink">
+      <img class="size-full object-contain rounded" :src="nugget.image"/>
     </NuxtLink>
 
   </UContextMenu>

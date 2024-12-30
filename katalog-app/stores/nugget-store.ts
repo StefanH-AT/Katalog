@@ -18,7 +18,7 @@ export const useNuggetStore = defineStore("nuggets", () => {
         }
     }
 
-    async function uploadNuggetsToServer(files: File[]) {
+    async function uploadNuggetsToServer(files: File[] | FileList) {
         const formData = new FormData();
 
         for (const file of files) {
