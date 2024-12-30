@@ -75,8 +75,7 @@ function buildProfileLinks() {
 </script>
 
 <template>
-
-  <UNavigationMenu :items="items"/>
+  <UNavigationMenu :items="items" highlight class="mb-2"/>
 </template>
 
 <style scoped>
