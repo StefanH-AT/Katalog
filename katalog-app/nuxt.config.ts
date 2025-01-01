@@ -13,10 +13,11 @@ if(envAuthDisable && envAuthDisable !== "false") {
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxt/ui', '@sidebase/nuxt-auth', '@nuxt/fonts'],
+  modules: ['@nuxt/ui', '@sidebase/nuxt-auth', '@nuxt/fonts', '@pinia/nuxt'],
   runtimeConfig: {
     public: {
       authDisabled: !authEnabled,
+      baseUrl: "http://localhost:3000",
     },
     auth: {
       secret: "",
@@ -42,10 +43,17 @@ export default defineNuxtConfig({
     },
     globalAppMiddleware: authEnabled,
   },
+  pinia: {
+    storesDirs: ["./stores/**"],
+  },
   fonts: {
     families: [
       { name: "Inter", provider: "google" }
     ]
+  },
+  css: ["~/assets/css/main.css"],
+  ui: {
+
   },
   app: {
     head: {

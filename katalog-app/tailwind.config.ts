@@ -5,5 +5,10 @@ export default <Partial<Config>> {
         fontFamily: {
             sans: ["Inter", "sans-serif"],
         },
+        extend: {
+            gridTemplateRows: {
+                "layout": "auto 1fr auto",
+            }
+        }
     },
 }

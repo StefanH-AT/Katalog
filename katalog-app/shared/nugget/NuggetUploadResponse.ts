@@ -1,3 +1,5 @@
+import type {NuggetMetaData} from "#shared/nugget/NuggetMetaData";
+
 interface NuggetUploadResponseBase {
     index: number;
     fileName: string;
@@ -5,7 +7,7 @@ interface NuggetUploadResponseBase {
 
 export interface NuggetUploadSuccessResponse extends NuggetUploadResponseBase {
     status: 0;
-    nuggetId: string;
+    metaData: NuggetMetaData;
 }
 
 export interface NuggetUploadFailureResponse extends NuggetUploadResponseBase {

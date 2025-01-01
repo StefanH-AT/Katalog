@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+    --font-display: "Inter", "sans-serif";
+}
+
+@utility layout {
+    grid-template-rows: "auto 1fr auto";
+}

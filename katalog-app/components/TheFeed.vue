@@ -1,18 +1,31 @@
 <template>
-<div class="flex flex-shrink gap-3">
-  <NuxtLink class="border border-gray-700 hover:border-primary cursor-pointer p-1"
-            v-for="nugget of nuggets.data.value"
-            :to="`/nugget/${nugget.nuggetId}`">
-    <img class="max-h-40" :src="nugget.image"/>
-  </NuxtLink>
-</div>
+  <div class="min-h-full grid content-start gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6" ref="dropZoneRef">
+    <FeedAddFiles :is-over-drop-zone="isOverDropZone" />
+    <FeedNugget v-for="nugget of nuggetStore.nuggets" :nugget="nugget" />
+  </div>
 </template>
 
 <script setup lang="ts">
 
-import type {NuggetMetaData} from "#shared/nugget/NuggetMetaData";
+import {useDropZone} from "@vueuse/core";
+import FeedNugget from "~/components/FeedNugget.vue";
+import FeedAddFiles from "~/components/FeedAddFiles.vue";
 
-const nuggets = await useFetch<NuggetMetaData[]>("/api/nugget");
+const nuggetStore = useNuggetStore();
+
+nuggetStore.fetchNuggets();
+
+const dropZoneRef = ref<HTMLDivElement>();
+const { isOverDropZone } = useDropZone(dropZoneRef, {
+  onDrop,
+  multiple: true,
+  preventDefaultForUnhandled: false,
+});
+
+function onDrop(files: File[] | null) {
+  if(!files) return;
+  nuggetStore.uploadNuggetsToServer(files);
+}
 
 </script>
 
