@@ -15,6 +15,7 @@
 import type {NuggetMetaData} from "#shared/nugget/NuggetMetaData";
 import {useClipboard} from "@vueuse/core";
 import {useToast} from "#imports";
+import pathe from "pathe";
 
 const clipboard = useClipboard();
 const config = useRuntimeConfig();
@@ -23,10 +24,11 @@ const nuggetStore = useNuggetStore();
 
 const props = defineProps<{ nugget: NuggetMetaData }>();
 
-const nuggetLink = `/nugget/${props.nugget.nuggetId}`;
+const nuggetLink = `nugget/${props.nugget.nuggetId}`;
 
 function copyLink() {
-  clipboard.copy(`${config.public.baseUrl}${nuggetLink}`);
+  const link = pathe.join(useRequestURL().toString(), nuggetLink);
+  clipboard.copy(link);
 }
 
 async function deleteMe() {
