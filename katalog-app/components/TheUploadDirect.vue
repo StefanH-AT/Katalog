@@ -139,7 +139,7 @@ const columns = [
       </UTable>
 
       <div v-if="addedFiles.length > 0">
-        <UDivider class="mb-5"/>
+        <USeparator class="mb-5"/>
 
         <UButton leading-icon="lucide:plus" @click="open" variant="ghost">Add files</UButton>
       </div>
