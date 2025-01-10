@@ -5,11 +5,19 @@
            class="border rounded-lg border-gray-700 hover:border-gray-400 h-full md:aspect-square gap-0.5 cursor-pointer text-lg"
            @click="() => open()">
 
-    <UIcon name="lucide:plus" size="1.5em" v-if="!isOverDropZone"/>
-    <span v-if="!isOverDropZone">Add</span>
+    <div class="flex gap-2 items-center">
+      <div class="flex" v-if="!isOverDropZone">
+        <UIcon name="lucide:plus" size="1.5em"/>
+        <span>Add</span>
+      </div>
 
-    <UIcon name="lucide:cloud-upload" size="1.5em" v-if="isOverDropZone"/>
-    <span v-if="isOverDropZone">Drop files</span>
+      <div class="flex" v-if="isOverDropZone">
+        <UIcon name="lucide:cloud-upload" size="1.5em"/>
+        <span>Drop files</span>
+      </div>
+
+      <UKbd v-if="!isMobile">Crtl + V</UKbd>
+    </div>
 
   </UButton>
 </template>
@@ -17,9 +25,11 @@
 <script setup lang="ts">
 
 import {useFileDialog} from "@vueuse/core";
+import {useRequestHeaders} from "#app";
 
 const nuggetStore = useNuggetStore();
 const props = defineProps<{ isOverDropZone: boolean }>();
+const {isMobile} = useUserAgentInfo();
 
 const {open, files, reset, onChange, onCancel} = useFileDialog({
   accept: "*",

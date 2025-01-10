@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 
-import {useDropZone} from "@vueuse/core";
+import {useDropZone, useEventListener} from "@vueuse/core";
 import FeedNugget from "~/components/FeedNugget.vue";
 import FeedAddFiles from "~/components/FeedAddFiles.vue";
 
@@ -26,6 +26,13 @@ function onDrop(files: File[] | null) {
   if(!files) return;
   nuggetStore.uploadNuggetsToServer(files);
 }
+
+useEventListener("paste", (event: ClipboardEvent) => {
+  const clipboardData = event.clipboardData;
+  if (!clipboardData || clipboardData.files.length === 0) return;
+
+  nuggetStore.uploadNuggetsToServer(clipboardData.files);
+});
 
 </script>
 

@@ -3,6 +3,7 @@ import TheFeed from "~/components/TheFeed.vue";
 
 definePageMeta({
   auth: false,
+  title: "Main",
 });
 
 const {status,signIn} = useAuth();

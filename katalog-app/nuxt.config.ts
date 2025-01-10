@@ -16,6 +16,7 @@ export default defineNuxtConfig({
   modules: ['@nuxt/ui', '@sidebase/nuxt-auth', '@nuxt/fonts', '@pinia/nuxt'],
   runtimeConfig: {
     public: {
+      siteName: "The Katalog",
       authDisabled: !authEnabled,
     },
     auth: {
