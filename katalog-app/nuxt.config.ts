@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
+import {renderANSI} from "uqr";
 
 let authEnabled = true;
 
@@ -10,6 +11,12 @@ if(envAuthDisable && envAuthDisable !== "false") {
   console.log("Auth disabled");
 }
 
+const host = process.env.NUXT_HOST ?? "http://localhost:3000";
+console.log(`Host is: ${host}`);
+if(process.env.NODE_ENV === "production") {
+  console.log(renderANSI(host));
+}
+
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
@@ -18,6 +25,7 @@ export default defineNuxtConfig({
     public: {
       siteName: "The Katalog",
       authDisabled: !authEnabled,
+      host: host,
     },
     auth: {
       secret: "",
@@ -29,6 +37,7 @@ export default defineNuxtConfig({
     isEnabled: true,
     disableServerSideAuth: false,
     originEnvKey: 'AUTH_ORIGIN',
+    baseURL: `${host}/api/auth`,
     provider: {
       type: "authjs",
       trustHost: false,
