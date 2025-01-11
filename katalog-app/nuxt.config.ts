@@ -1,9 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
-import {renderANSI} from "uqr";
-
 let authEnabled = true;
-
 const envAuthDisable = process.env.NUXT_AUTH_DISABLE;
 if(envAuthDisable && envAuthDisable !== "false") {
   authEnabled = false;
@@ -12,10 +9,6 @@ if(envAuthDisable && envAuthDisable !== "false") {
 }
 
 const host = process.env.NUXT_HOST ?? "http://localhost:3000";
-console.log(`Host is: ${host}`);
-if(process.env.NODE_ENV === "production") {
-  console.log(renderANSI(host));
-}
 
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
