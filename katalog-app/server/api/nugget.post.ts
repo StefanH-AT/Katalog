@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
 
     const responses: NuggetUploadResponse[] = [];
 
-    const promises: Promise<{ index: number, fileName: string, nuggetId: string }>[] = [];
+    const promises: Promise<NuggetWriteResult>[] = [];
 
     for (let i = 0; i < multiPartData.length; i++){
         const part = multiPartData[i];
@@ -58,7 +58,7 @@ export default defineEventHandler(async (event) => {
             nuggetFileName: resolve.fileName,
             uploadUserId: session.user?.id ?? "", // TODO: Verify user before uploading
             uploadTimestamp: nowTimestamp,
-            image: `/nuggets/${resolve.nuggetId}/${resolve.fileName}`,
+            image: resolve.publicPath,
         };
 
         responses.push({
@@ -77,15 +77,23 @@ export default defineEventHandler(async (event) => {
     return responses;
 });
 
-async function writeNugget(fileName: string, index: number, data: Buffer): Promise<{ index: number, fileName: string, nuggetId: string }> {
+interface NuggetWriteResult {
+    index: number;
+    fileName: string;
+    publicPath: string;
+    nuggetId: string;
+}
+
+async function writeNugget(fileName: string, index: number, data: Buffer): Promise<NuggetWriteResult> {
     const nuggetDir = getNuggetDirectory();
 
     const nuggetId = createNuggetId();
-    const fileDir = path.join(nuggetDir, nuggetId);
-    await mkdir(fileDir, {recursive: true});
-    const filePath = path.join(fileDir, fileName);
-    console.log(`Writing nugget to ${filePath}`);
-    await fs.writeFile(filePath, data);
+    const fileExtension = path.extname(fileName);
+    const newFileName = nuggetId + fileExtension;
+    const finalFilePath = path.join(nuggetDir, newFileName);
+    await mkdir(nuggetDir, {recursive: true});
+    console.log(`Writing nugget to ${finalFilePath}`);
+    await fs.writeFile(finalFilePath, data);
 
-    return { index, fileName, nuggetId };
+    return { index, fileName, nuggetId, publicPath: `/api/nugget_files/${newFileName}` };
 }
