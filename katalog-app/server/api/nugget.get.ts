@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     const storage = useStorage("data");
 
     const keys = await storage.getKeys("nuggets");
-    const nuggets = await Promise.all(keys.map((k) => storage.getItem(k)));
+    const nuggets = (await Promise.all(keys.map((k) => storage.getItem(k)))).toReversed();
 
     return nuggets;
 });

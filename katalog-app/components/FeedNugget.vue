@@ -49,7 +49,7 @@ async function deleteMe() {
 const contextMenuItems = ref([
   [
     {
-      label: `Nugget`,
+      label: `Nugget ${props.nugget.nuggetId}`,
       type: "label" as const,
     },
   ],

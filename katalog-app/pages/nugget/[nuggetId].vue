@@ -1,6 +1,11 @@
 <template>
 <div>
-  <UButton leading-icon="lucide:arrow-left" color="neutral" variant="subtle" class="mb-2" @click="back()">Back</UButton>
+  <div class="flex items-center gap-2 mb-2">
+    <UButton leading-icon="lucide:arrow-left" color="neutral" variant="subtle" @click="back()">Back</UButton>
+    <div v-if="data != null" class="ml-auto">
+      <span class="font-mono text-xl">{{data.nuggetId}}</span>
+    </div>
+  </div>
   <NuggetDetailView v-if="data != null" :nugget-meta-data="data" />
   <div v-if="data == null">Unknown nugget</div>
 </div>

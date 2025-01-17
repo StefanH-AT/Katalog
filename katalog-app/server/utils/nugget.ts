@@ -4,13 +4,18 @@ export function getNuggetDirectory(): string {
     return path.join(process.cwd(), ".nuggets");
 }
 
-let currentNuggetId = 0;
+export async function createNuggetId(): Promise<string | null> {
 
-export function createNuggetId(): string {
-    ++currentNuggetId; // TODO: This cache doesn't work
-    const newId =`N${currentNuggetId}`;
+    const store = useStorage("data");
 
-    useStorage("data").setItem("last_nugget_id", currentNuggetId);
+    let id = await store.getItem("last_nugget_id");
+
+    if(typeof(id) !== "number") return null;
+
+    id++;
+
+    const newId =`N${id}`;
+    await store.setItem("last_nugget_id", id);
 
     return newId;
 }

@@ -3,6 +3,7 @@ import {randomUUID} from "uncrypto";
 import {OAuthUserConfig} from "next-auth/providers/oauth";
 import {UnstorageAdapter} from "@auth/unstorage-adapter";
 import {NuxtAuthHandler} from "#auth";
+import {StoredUser} from "~/server/utils/StoredUser";
 
 interface FullDiscordProfile extends DiscordProfile {
     global_name: string;
@@ -17,7 +18,7 @@ export default NuxtAuthHandler({
         DiscordProvider.default({
             clientId: useRuntimeConfig().auth.discordClientId,
             clientSecret: useRuntimeConfig().auth.discordClientSecret,
-            profile: (profile: FullDiscordProfile, tokens) => {
+            profile: (profile: FullDiscordProfile, tokens): StoredUser => {
                 if (profile.avatar === null) {
                     const defaultAvatarNumber = parseInt(profile.discriminator) % 5
                     profile.image_url = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`
@@ -50,5 +51,3 @@ export default NuxtAuthHandler({
 function generateUserId(): string {
     return randomUUID();
 }
-
-type KatalogUserRegisterStatus = "unverified" | "verified";

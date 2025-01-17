@@ -21,6 +21,7 @@ export const NuggetUploadFailureReasons = {
     Unknown: 0,
     NoFileName: 1,
     ImageFileSizeExceeded: 2,
+    Internal_IdCreationFailed: 2,
 } as const;
 export type NuggetUploadFailureReason = (typeof NuggetUploadFailureReasons)[keyof typeof NuggetUploadFailureReasons];
 

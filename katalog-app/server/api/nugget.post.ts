@@ -20,7 +20,8 @@ export default defineEventHandler(async (event) => {
 
     const responses: NuggetUploadResponse[] = [];
 
-    const promises: Promise<NuggetWriteResult>[] = [];
+    const promises: Promise<NuggetWriteResult | null>[] = [];
+    const fileNames: string[] = [];
 
     for (let i = 0; i < multiPartData.length; i++){
         const part = multiPartData[i];
@@ -45,25 +46,39 @@ export default defineEventHandler(async (event) => {
             continue;
         }
 
-        promises.push(writeNugget(part.filename, i, part.data));
+        const writePromise = writeNugget(part.filename, part.data);
+        promises.push(writePromise);
+        fileNames.push(part.filename);
     }
 
     const resolves = await Promise.all(promises);
 
     const nowTimestamp = Date.now();
 
-    for (const resolve of resolves) {
+    for (let i = 0; i < resolves.length; i++){
+        const resolve = resolves[i];
+
+        if(resolve === null) {
+            responses.push({
+                status: NuggetUploadResponseStatuses.Failure,
+                failureReason: NuggetUploadFailureReasons.Internal_IdCreationFailed,
+                index: i,
+                fileName: fileNames[i],
+            })
+            continue;
+        }
+
         const metaData: NuggetMetaData = {
             nuggetId: resolve.nuggetId,
-            nuggetFileName: resolve.fileName,
+            nuggetFileName: fileNames[i],
             uploadUserId: session.user?.id ?? "", // TODO: Verify user before uploading
             uploadTimestamp: nowTimestamp,
             image: resolve.publicPath,
         };
 
         responses.push({
-            index: resolve.index,
-            fileName: resolve.fileName,
+            index: i,
+            fileName: fileNames[i],
             status: NuggetUploadResponseStatuses.Success,
             metaData,
         });
@@ -78,22 +93,21 @@ export default defineEventHandler(async (event) => {
 });
 
 interface NuggetWriteResult {
-    index: number;
-    fileName: string;
     publicPath: string;
     nuggetId: string;
 }
 
-async function writeNugget(fileName: string, index: number, data: Buffer): Promise<NuggetWriteResult> {
+async function writeNugget(fileName: string, data: Buffer): Promise<NuggetWriteResult | null> {
     const nuggetDir = getNuggetDirectory();
 
-    const nuggetId = createNuggetId();
+    const nuggetId = await createNuggetId();
+    if(!nuggetId) return null;
+
     const fileExtension = path.extname(fileName);
     const newFileName = nuggetId + fileExtension;
     const finalFilePath = path.join(nuggetDir, newFileName);
     await mkdir(nuggetDir, {recursive: true});
-    console.log(`Writing nugget to ${finalFilePath}`);
     await fs.writeFile(finalFilePath, data);
 
-    return { index, fileName, nuggetId, publicPath: `/api/nugget_files/${newFileName}` };
+    return { nuggetId, publicPath: `/api/nugget_files/${newFileName}` };
 }

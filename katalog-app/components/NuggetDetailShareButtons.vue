@@ -1,7 +1,9 @@
 <script setup lang="ts">
 
-import {useShare, type UseShareOptions} from "@vueuse/core";
+import {useClipboard, useShare, type UseShareOptions} from "@vueuse/core";
 import type {NuggetMetaData} from "#shared/nugget/NuggetMetaData";
+
+const clipboard = useClipboard();
 
 const props = defineProps<{ nuggetMetaData: NuggetMetaData }>();
 
@@ -48,9 +50,14 @@ async function shareFile() {
   }
 }
 
+function copyLink() {
+  clipboard.copy(useRequestURL().toString());
+}
+
 </script>
 
 <template>
+  <UButton variant="subtle" color="secondary" label="Copy Link" leading-icon="lucide:link" @click="copyLink"/>
   <UButton variant="subtle" color="secondary" label="Share Link" leading-icon="lucide:link" @click="shareLink" :disabled="!isShareSupported" :loading="isSupportLoading"/>
   <UButton variant="subtle" color="secondary" label="Share File" leading-icon="lucide:image-up" @click="shareFile" :disabled="!isShareSupported" :loading="isSupportLoading"/>
 </template>
