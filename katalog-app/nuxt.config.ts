@@ -19,6 +19,10 @@ export default defineNuxtConfig({
       siteName: "The Katalog",
       authDisabled: !authEnabled,
       host: host,
+      perm: {
+        view_feed: 0,
+        new_account_role: 10,
+      }
     },
     auth: {
       secret: "",

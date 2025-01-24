@@ -1,4 +1,6 @@
 
+import {KatalogRole} from "#shared/user/KatalogRoles";
+
 // Internal, server-only user data that shouldn't be always exposed to client
 export interface StoredUser {
     id: string;
@@ -7,7 +9,5 @@ export interface StoredUser {
     image: string;
     displayName: string;
     color: string;
-    registerStatus: StoredUserRegisterStatus,
+    role: KatalogRole;
 }
-
-export type StoredUserRegisterStatus = "unverified" | "verified";

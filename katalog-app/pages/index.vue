@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import TheFeed from "~/components/TheFeed.vue";
+import {KatalogPermissions} from "#shared/user/KatalogPermissions";
 
 definePageMeta({
   auth: false,
@@ -7,11 +8,13 @@ definePageMeta({
 });
 
 const {status,signIn} = useAuth();
+
+const access = hasAccess(KatalogPermissions.ViewFeed);
 </script>
 
 <template>
   <div>
-    <TheFeed v-if="status === 'authenticated'"/>
+    <TheFeed v-if="access"/>
 
     <div v-else class="h-full grid place-items-center content-center text-center">
       <h1 class="text-5xl font-semibold tracking-tighty text-green-200">Private Katalog</h1>

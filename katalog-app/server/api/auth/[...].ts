@@ -4,6 +4,7 @@ import {OAuthUserConfig} from "next-auth/providers/oauth";
 import {UnstorageAdapter} from "@auth/unstorage-adapter";
 import {NuxtAuthHandler} from "#auth";
 import {StoredUser} from "~/server/utils/StoredUser";
+import {getPermissionConfig, KatalogPermissions} from "#shared/user/KatalogPermissions";
 
 interface FullDiscordProfile extends DiscordProfile {
     global_name: string;
@@ -34,7 +35,7 @@ export default NuxtAuthHandler({
                     image: profile.image_url,
                     displayName: profile.global_name,
                     color: profile.banner_color,
-                    registerStatus: "unverified",
+                    role: getPermissionConfig(KatalogPermissions.NewAccountRole)
                 }
             },
         } as OAuthUserConfig<any>)
