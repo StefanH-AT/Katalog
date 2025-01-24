@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-full grid content-start gap-3 grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6" ref="dropZoneRef">
     <FeedAddFiles :is-over-drop-zone="isOverDropZone" />
-    <FeedNugget v-for="nugget of nuggetStore.nuggets" :nugget="nugget" />
+    <FeedNugget v-for="nugget of nuggetStore.nuggets" :key="nugget.nuggetId" :nugget="nugget" />
   </div>
 </template>
 
