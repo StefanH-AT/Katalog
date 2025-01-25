@@ -1,5 +1,5 @@
 
-import {KatalogRole} from "#shared/user/KatalogRoles";
+import {KatalogRole, KatalogRoles} from "#shared/user/KatalogRoles";
 
 // Internal, server-only user data that shouldn't be always exposed to client
 export interface StoredUser {
@@ -10,4 +10,14 @@ export interface StoredUser {
     displayName: string;
     color: string;
     role: KatalogRole;
+}
+
+export const AnonymousUser: StoredUser = {
+    id: "0",
+    name: "anonymous",
+    email: "",
+    image: "",
+    displayName: "Anonymous",
+    color: "#ff00ff",
+    role: KatalogRoles.Admin,
 }
