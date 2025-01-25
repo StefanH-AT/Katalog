@@ -1,4 +1,4 @@
-import type {NuggetMetaData} from "#shared/nugget/NuggetMetaData";
+import type {Nugget} from "#shared/nugget/Nugget";
 
 interface NuggetUploadResponseBase {
     index: number;
@@ -7,7 +7,7 @@ interface NuggetUploadResponseBase {
 
 export interface NuggetUploadSuccessResponse extends NuggetUploadResponseBase {
     status: 0;
-    metaData: NuggetMetaData;
+    metaData: Nugget;
 }
 
 export interface NuggetUploadFailureResponse extends NuggetUploadResponseBase {
@@ -21,7 +21,8 @@ export const NuggetUploadFailureReasons = {
     Unknown: 0,
     NoFileName: 1,
     ImageFileSizeExceeded: 2,
-    Internal_IdCreationFailed: 2,
+    InvalidFileType: 3,
+    Internal_IdCreationFailed: 4,
 } as const;
 export type NuggetUploadFailureReason = (typeof NuggetUploadFailureReasons)[keyof typeof NuggetUploadFailureReasons];
 

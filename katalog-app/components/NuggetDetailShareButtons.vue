@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
 import {useClipboard, useShare, type UseShareOptions} from "@vueuse/core";
-import type {NuggetMetaData} from "#shared/nugget/NuggetMetaData";
+import type {Nugget} from "#shared/nugget/Nugget";
 
 const clipboard = useClipboard();
 
-const props = defineProps<{ nuggetMetaData: NuggetMetaData }>();
+const props = defineProps<{ nuggetMetaData: Nugget }>();
 
 const isSupportLoading = ref(true);
 const isShareSupported = ref(false);
@@ -22,14 +22,14 @@ onMounted(() => {
 function shareLink() {
   if(shareFunction.value) {
     shareFunction.value({
-      url: props.nuggetMetaData.image,
-      title: `Katalog - ${props.nuggetMetaData.nuggetFileName}`,
+      url: props.nugget.image,
+      title: `Katalog - ${props.nugget.nuggetFileName}`,
     });
   }
 }
 
 async function shareFile() {
-  const response = await fetch(props.nuggetMetaData.image, {
+  const response = await fetch(props.nugget.image, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/octet-stream',
@@ -38,14 +38,14 @@ async function shareFile() {
 
   const blob = await response.blob();
 
-  const file = new File([blob], props.nuggetMetaData.nuggetFileName, {
+  const file = new File([blob], props.nugget.nuggetFileName, {
     type: blob.type,
   });
 
   if(shareFunction.value) {
     shareFunction.value({
       files: [file],
-      title: `Katalog - ${props.nuggetMetaData.nuggetFileName}`,
+      title: `Katalog - ${props.nugget.nuggetFileName}`,
     });
   }
 }

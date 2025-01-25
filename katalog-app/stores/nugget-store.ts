@@ -1,10 +1,10 @@
-import type {NuggetMetaData} from "#shared/nugget/NuggetMetaData";
+import type {Nugget} from "#shared/nugget/Nugget";
 import type {NuggetDeleteResponse} from "#shared/nugget/NuggetDeleteResponse";
 import type {NuggetUploadResponse} from "#shared/nugget/NuggetUploadResponse";
 import {NuggetUploadResponseStatuses} from "#shared/nugget/NuggetUploadResponse";
 
 export const useNuggetStore = defineStore("nuggets", () => {
-    const nuggets = ref<NuggetMetaData[]>([]);
+    const nuggets = ref<Nugget[]>([]);
     const nuggetFetchStatus = ref<"loaded" | "loading" | "failed">("loading");
 
     async function deleteNuggetFromServer(nuggetId: string): Promise<boolean> {
@@ -34,7 +34,7 @@ export const useNuggetStore = defineStore("nuggets", () => {
 
         const responses = result.data.value as NuggetUploadResponse[];
 
-        const newNugs: NuggetMetaData[] = [];
+        const newNugs: Nugget[] = [];
         for (const response of responses) {
             if(response.status === NuggetUploadResponseStatuses.Failure) continue;  // TODO: Handle this case
 
@@ -44,7 +44,7 @@ export const useNuggetStore = defineStore("nuggets", () => {
         addNuggetsToFront(newNugs);
     }
 
-    function addNuggetsToFront(newNuggets: NuggetMetaData[]) {
+    function addNuggetsToFront(newNuggets: Nugget[]) {
         nuggets.value = [...newNuggets, ...nuggets.value];
     }
 
@@ -57,7 +57,7 @@ export const useNuggetStore = defineStore("nuggets", () => {
 
     function fetchNuggets(): void {
         nuggetFetchStatus.value = "loading";
-        useFetch<NuggetMetaData[]>("/api/nugget").then((result) => {
+        useFetch<Nugget[]>("/api/nugget").then((result) => {
             if(result.data.value) {
                 nuggets.value = result.data.value;
                 nuggetFetchStatus.value = "loaded";

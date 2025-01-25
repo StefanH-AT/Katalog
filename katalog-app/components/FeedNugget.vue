@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 
-import type {NuggetMetaData} from "#shared/nugget/NuggetMetaData";
+import type {Nugget} from "#shared/nugget/Nugget";
 import {useClipboard} from "@vueuse/core";
 import {useToast} from "#imports";
 import pathe from "pathe";
@@ -22,7 +22,7 @@ const config = useRuntimeConfig();
 const toast = useToast();
 const nuggetStore = useNuggetStore();
 
-const props = defineProps<{ nugget: NuggetMetaData }>();
+const props = defineProps<{ nugget: Nugget }>();
 
 const nuggetLink = `nugget/${props.nugget.nuggetId}`;
 
