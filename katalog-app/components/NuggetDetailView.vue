@@ -2,7 +2,7 @@
   <div class="grid gap-3 grid-cols-1 lg:grid-cols-2">
     <div>
       <div class="border border-gray-700 rounded p-3 grid place-items-center">
-        <img :src="props.nuggetMetaData.image"/>
+        <img :src="props.nuggetMetaData.image" :class="{ 'w-full': fullSizeCookie }"/>
       </div>
     </div>
     <div>
@@ -23,7 +23,15 @@
         <span class="font-bold">Uploaded by:</span>
         <AvatarAndName :avatar-url="profile?.avatarUrl" :user-id="props.nuggetMetaData.uploadUserId" :display-name="profile?.displayName ?? 'Unknown'"/>
 
+
       </div>
+
+      <USeparator class="my-2"/>
+
+      <div>
+        <USwitch label="Full size" v-model="fullSizeCookie"/>
+      </div>
+
     </div>
   </div>
 </template>
@@ -34,6 +42,8 @@ import {useDownloadToBrowser} from "~/composables/useDownloadToBrowser";
 import NuggetDetailShareButtons from "~/components/NuggetDetailShareButtons.vue";
 import type {UserProfile} from "#shared/user/UserProfile";
 import AvatarAndName from "~/components/AvatarAndName.vue";
+import {addDays} from "#shared/DateUtil";
+import {useKatalogImageFullSizeCookie} from "~/composables/useKatalogCookies";
 
 const props = defineProps<{ nuggetMetaData: NuggetMetaData }>();
 
@@ -45,6 +55,8 @@ function download() {
 
 const uploadUser = await useFetch<UserProfile>(`/api/user/${props.nuggetMetaData.uploadUserId}`);
 const profile = uploadUser.data?.value;
+
+const fullSizeCookie = useKatalogImageFullSizeCookie();
 
 </script>
 
