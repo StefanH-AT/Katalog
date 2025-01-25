@@ -3,9 +3,7 @@
 import {useClipboard, useShare, type UseShareOptions} from "@vueuse/core";
 import type {Nugget} from "#shared/nugget/Nugget";
 
-const clipboard = useClipboard();
-
-const props = defineProps<{ nuggetMetaData: Nugget }>();
+const props = defineProps<{ nugget: Nugget }>();
 
 const isSupportLoading = ref(true);
 const isShareSupported = ref(false);
@@ -29,13 +27,7 @@ function shareLink() {
 }
 
 async function shareFile() {
-  const response = await fetch(props.nugget.image, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/octet-stream',
-    },
-  });
-
+  const response = await fetch(props.nugget.image);
   const blob = await response.blob();
 
   const file = new File([blob], props.nugget.nuggetFileName, {
@@ -50,14 +42,9 @@ async function shareFile() {
   }
 }
 
-function copyLink() {
-  clipboard.copy(useRequestURL().toString());
-}
-
 </script>
 
 <template>
-  <UButton variant="subtle" color="secondary" label="Copy Link" leading-icon="lucide:link" @click="copyLink"/>
   <UButton variant="subtle" color="secondary" label="Share Link" leading-icon="lucide:link" @click="shareLink" :disabled="!isShareSupported" :loading="isSupportLoading"/>
   <UButton variant="subtle" color="secondary" label="Share File" leading-icon="lucide:image-up" @click="shareFile" :disabled="!isShareSupported" :loading="isSupportLoading"/>
 </template>

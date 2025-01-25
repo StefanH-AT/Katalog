@@ -7,7 +7,10 @@
     </div>
     <div>
       <div class="flex gap-2 mb-2">
-        <NuggetDetailShareButtons :nugget-meta-data="props.nugget"/>
+        <NuggetDetailCopyButtons :nugget="props.nugget"/>
+      </div>
+      <div class="flex gap-2 mb-2">
+        <NuggetDetailShareButtons :nugget="props.nugget"/>
       </div>
       <div>
         <UButton variant="subtle" color="secondary" label="Download" leading-icon="lucide:download" @click="download"/>
@@ -51,6 +54,7 @@ import type {UserProfile} from "#shared/user/UserProfile";
 import AvatarAndName from "~/components/AvatarAndName.vue";
 import {addDays} from "#shared/DateUtil";
 import {useKatalogImageFullSizeCookie} from "~/composables/useKatalogCookies";
+import NuggetDetailCopyButtons from "~/components/NuggetDetailCopyButtons.vue";
 
 const props = defineProps<{ nugget: Nugget }>();
 
