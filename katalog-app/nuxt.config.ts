@@ -28,6 +28,12 @@ export default defineNuxtConfig({
       secret: "",
       discordClientId: "",
       discordClientSecret: "",
+    },
+    discord: {
+      bot: {
+        enable: false,
+        token: undefined,
+      }
     }
   },
   auth: {
