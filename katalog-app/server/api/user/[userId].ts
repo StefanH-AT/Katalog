@@ -5,9 +5,17 @@ import {UserProfile} from "#shared/user/UserProfile";
 export default defineEventHandler(async (event) => {
     await protectEndpoint(event);
 
-    const username = getRouterParam(event, "username");
+    const userId = getRouterParam(event, "userId");
+    if(userId === AnonymousUser.id) {
+        return AnonymousUser;
+    }
+
     const store = useStorage("data");
-    const storedUser = await store.getItem(`user:${username}`) as StoredUser;
+    const storedUser = await store.getItem(`user:${userId}`) as StoredUser | undefined;
+
+    if(!storedUser) {
+        return undefined;
+    }
 
     const profile: UserProfile = {
         id: storedUser.id,

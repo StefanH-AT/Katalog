@@ -101,7 +101,7 @@ export default defineEventHandler(async (event) => {
                 type: "Image",
                 nuggetId: resolve.nuggetId,
                 nuggetFileName: fileNames[i],
-                uploadUserId: session.user?.id ?? "", // TODO: Verify user before uploading
+                uploadUserId: session.user?.id ?? AnonymousUser.id,
                 uploadTimestamp: nowTimestamp,
                 image: resolve.publicPath,
                 metaData: resolve.metaData,

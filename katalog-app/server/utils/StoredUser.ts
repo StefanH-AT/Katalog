@@ -13,7 +13,7 @@ export interface StoredUser {
 }
 
 export const AnonymousUser: StoredUser = {
-    id: "0",
+    id: "anonymous",
     name: "anonymous",
     email: "",
     image: "",
