@@ -6,11 +6,12 @@
       </div>
     </div>
     <div>
-      <div class="flex gap-2 mb-2">
-        <NuggetDetailCopyButtons :nugget="props.nugget"/>
-      </div>
-      <div class="flex gap-2 mb-2">
-        <NuggetDetailShareButtons :nugget="props.nugget"/>
+      <div class="grid grid-cols-[auto_1fr] mb-2">
+        <div class="grid grid-cols-2 gap-2">
+          <NuggetDetailCopyButtons :nugget="props.nugget"/>
+          <NuggetDetailShareButtons :nugget="props.nugget"/>
+        </div>
+         <RouteQrImage class="bg-right"/>
       </div>
       <div>
         <UButton variant="subtle" color="secondary" label="Download" leading-icon="lucide:download" @click="download"/>
@@ -55,6 +56,7 @@ import AvatarAndName from "~/components/AvatarAndName.vue";
 import {addDays} from "#shared/DateUtil";
 import {useKatalogImageFullSizeCookie} from "~/composables/useKatalogCookies";
 import NuggetDetailCopyButtons from "~/components/NuggetDetailCopyButtons.vue";
+import RouteQrImage from "~/components/RouteQrImage.vue";
 
 const props = defineProps<{ nugget: Nugget }>();
 
