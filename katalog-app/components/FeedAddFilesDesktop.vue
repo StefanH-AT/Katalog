@@ -27,7 +27,7 @@ onChange((files) => {
     <div class="flex gap-2 items-center">
       <div class="flex" v-if="!isOverDropZone">
         <UIcon name="lucide:plus" size="1.5em"/>
-        <span>Add</span>
+        <span>Quick Add</span>
       </div>
 
       <div class="flex" v-if="isOverDropZone">

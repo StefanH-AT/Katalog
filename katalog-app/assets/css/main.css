@@ -5,6 +5,14 @@
     --font-display: "Inter", "sans-serif";
 }
 
-@utility layout {
-    grid-template-rows: "auto 1fr auto";
+:root {
+    --flow-gutter: clamp(0.25rem, 4%, 20rem);
+}
+
+.flow-full {
+    grid-column: full-left / full-right !important; /* TODO: Tailwind supports cascade layers doesn't it? This gets overridden by    ._layout > *     */
+}
+
+.flow-full-padding {
+    padding-inline: var(--flow-gutter);
 }

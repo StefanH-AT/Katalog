@@ -50,7 +50,7 @@ async function handlePasteClipboard() {
 
 <template>
   <div class="flex flex-row flex-wrap gap-3">
-    <UButton variant="outline" color="neutral" class="grow-10 justify-center" size="xl" leading-icon="lucide:plus" @click="() => open()">Add</UButton>
+    <UButton variant="outline" color="neutral" class="grow-10 justify-center" size="xl" leading-icon="lucide:plus" @click="() => open()">Quick Add</UButton>
     <UButton variant="outline" color="neutral" class="grow justify-center" size="xl" leading-icon="lucide:clipboard" :loading="pasteClipboardLoading" :disabled="pasteClipboardLoading" @click="handlePasteClipboard">Paste Clipboard</UButton>
   </div>
 </template>
