@@ -3,7 +3,7 @@ import {randomUUID} from "uncrypto";
 import {OAuthUserConfig} from "next-auth/providers/oauth";
 import {UnstorageAdapter} from "@auth/unstorage-adapter";
 import {NuxtAuthHandler} from "#auth";
-import {StoredUser} from "~/server/utils/StoredUser";
+import {KatalogUser} from "#shared/user/KatalogUser";
 import {getPermissionConfig, KatalogPermissions} from "#shared/user/KatalogPermissions";
 
 interface FullDiscordProfile extends DiscordProfile {
@@ -19,7 +19,7 @@ export default NuxtAuthHandler({
         DiscordProvider.default({
             clientId: useRuntimeConfig().auth.discordClientId,
             clientSecret: useRuntimeConfig().auth.discordClientSecret,
-            profile: (profile: FullDiscordProfile, tokens): StoredUser => {
+            profile: (profile: FullDiscordProfile, tokens): KatalogUser => {
                 if (profile.avatar === null) {
                     const defaultAvatarNumber = parseInt(profile.discriminator) % 5
                     profile.image_url = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`
@@ -32,7 +32,7 @@ export default NuxtAuthHandler({
                     id: generateUserId(),
                     name: profile.username,
                     email: profile.email,
-                    image: profile.image_url,
+                    avatarUrl: profile.image_url,
                     displayName: profile.global_name,
                     color: profile.banner_color,
                     role: getPermissionConfig(KatalogPermissions.NewAccountRole)

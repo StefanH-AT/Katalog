@@ -9,6 +9,9 @@ export async function createNuggetId(): Promise<string | null> {
     const store = useStorage("data");
 
     let id = await store.getItem("last_nugget_id");
+    if(id == null) {
+        id = 0;
+    }
 
     if(typeof(id) !== "number") return null;
 

@@ -1,6 +1,5 @@
 import {protectEndpoint} from "~/server/utils/EndpointProtection";
-import {StoredUser} from "~/server/utils/StoredUser";
-import {UserProfile} from "#shared/user/UserProfile";
+import {AnonymousUser, KatalogUser, KatalogUserProfile} from "#shared/user/KatalogUser";
 
 export default defineEventHandler(async (event) => {
     await protectEndpoint(event);
@@ -11,15 +10,15 @@ export default defineEventHandler(async (event) => {
     }
 
     const store = useStorage("data");
-    const storedUser = await store.getItem(`user:${userId}`) as StoredUser | undefined;
+    const storedUser = await store.getItem(`user:${userId}`) as KatalogUser | undefined;
 
     if(!storedUser) {
         return undefined;
     }
 
-    const profile: UserProfile = {
+    const profile: KatalogUserProfile = {
         id: storedUser.id,
-        avatarUrl: storedUser.image,
+        avatarUrl: storedUser.avatarUrl,
         color: storedUser.color,
         displayName: storedUser.displayName,
         name: storedUser.name,

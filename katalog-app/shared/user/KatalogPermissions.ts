@@ -1,4 +1,4 @@
-import {KatalogRole, KatalogRoles} from "#shared/user/KatalogRoles";
+import {type KatalogRole, KatalogRoles} from "#shared/user/KatalogRoles";
 
 export const KatalogPermissions = {
     ViewFeed: "view_feed",

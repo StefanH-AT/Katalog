@@ -1,6 +1,6 @@
 import {type DefaultSession, type DefaultUser, User} from 'next-auth'
-import type {KatalogUser} from "~/server/api/auth/[...]";
 import type {ISODateString} from "next-auth/core/types";
+import {KatalogUser} from "#shared/user/KatalogUser";
 
 declare module 'next-auth' {
 

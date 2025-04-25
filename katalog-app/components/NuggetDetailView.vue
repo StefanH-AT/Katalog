@@ -51,12 +51,12 @@
 import {type Nugget, NuggetTypes} from "#shared/nugget/Nugget";
 import {useDownloadToBrowser} from "~/composables/useDownloadToBrowser";
 import NuggetDetailShareButtons from "~/components/NuggetDetailShareButtons.vue";
-import type {UserProfile} from "#shared/user/UserProfile";
 import AvatarAndName from "~/components/AvatarAndName.vue";
 import {addDays} from "#shared/DateUtil";
 import {useKatalogImageFullSizeCookie} from "~/composables/useKatalogCookies";
 import NuggetDetailCopyButtons from "~/components/NuggetDetailCopyButtons.vue";
 import RouteQrImage from "~/components/RouteQrImage.vue";
+import type {KatalogUserProfile} from "#shared/user/KatalogUser";
 
 const props = defineProps<{ nugget: Nugget }>();
 
@@ -66,7 +66,7 @@ function download() {
   useDownloadToBrowser(props.nugget.image, props.nugget.nuggetFileName);
 }
 
-const uploadUser = await useFetch<UserProfile>(`/api/user/${props.nugget.uploadUserId}`);
+const uploadUser = await useFetch<KatalogUserProfile>(`/api/user/${props.nugget.uploadUserId}`);
 const profile = uploadUser.data?.value;
 
 const fullSizeCookie = useKatalogImageFullSizeCookie();
